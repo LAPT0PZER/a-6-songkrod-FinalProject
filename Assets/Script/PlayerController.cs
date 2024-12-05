@@ -12,6 +12,7 @@ public class PlayerController : Player {
     public Transform groundCheck;
     float groundRadius = 0.2f;
     public LayerMask whatIsGround;
+    [SerializeField] GameObject win;
 
     // Use this for initialization
     void Start()
@@ -28,6 +29,13 @@ public class PlayerController : Player {
             r2d.AddForce(new Vector2(0, JumpForce));
         }
         UpdateSpeedBoostTimer();
+        UpdatePointText();
+
+        if (Point >= 100)
+        {
+            Time.timeScale = 0f;
+            win.SetActive(true);
+        }
     }
 
     void FixedUpdate()

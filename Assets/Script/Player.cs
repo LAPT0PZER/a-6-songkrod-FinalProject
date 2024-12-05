@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    int point = 10;
+    int point = 0;
     public int Point {  get => point; set { point = value; } }
 
     float jumpForce = 100.0f;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     float speedBoostTimer = 0.0f;
     bool isSpeedBoostActive = false;
 
+    [SerializeField] TextMeshProUGUI pointText;
     protected void UpdateSpeedBoostTimer()
     {
         if (isSpeedBoostActive)
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
     {
         Point += getPoint;
         Debug.Log($"Get Point {getPoint} Points. Total Point: {Point}");
+        UpdatePointText();
     }
 
     public void FruitPoint(float jumpMultipier)
@@ -55,4 +58,8 @@ public class Player : MonoBehaviour
         Debug.Log($"Speed boosted by {speedMultiplier * 100}% for {duration} seconds.");
     }
 
+    public void UpdatePointText()
+    {
+        pointText.text = $"{Point}/100 Points";
+    }
 }
