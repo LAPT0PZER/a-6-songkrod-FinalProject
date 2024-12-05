@@ -9,11 +9,11 @@ public class PickUpFruitController : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Player player = collision.GetComponent<Player>();
-            Fruit powerUp = GetComponent<Fruit>();
+            Fruit fruit = GetComponent<Fruit>();
 
-            if (powerUp != null && player != null)
+            if (fruit != null && player != null)
             {
-                powerUp.PickUpFruit(player);
+                fruit.PickUpFruit(player);
                 Destroy(gameObject);
             }
         }

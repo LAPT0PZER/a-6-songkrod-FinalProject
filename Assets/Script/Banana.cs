@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Banana : Fruit
 {
-    private int healthIncrease;
+    private int getPoint;
 
     private void Start()
     {
-        healthIncrease = 20;
+        getPoint = 10;
     }
     public override void PickUpFruit(Player player)
     {
-        player.FruitPoint(healthIncrease);
+        player.FruitPoint(getPoint);
     }
 }

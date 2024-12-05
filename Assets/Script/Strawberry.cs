@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Strawberry : Fruit
 {
-    private float speedMultiplier = 2.0f;
+    private float speedMultiplier = 1.5f;
     private float duration = 5.0f;
     public override void PickUpFruit(Player player)
     {

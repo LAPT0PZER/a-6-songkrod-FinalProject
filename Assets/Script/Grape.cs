@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Grape : Fruit
 {
-    private float jumpMultipier = 5f;
+    private float jumpMultipier = 4f;
     public override void PickUpFruit(Player player)
     {
         player.FruitPoint(jumpMultipier);

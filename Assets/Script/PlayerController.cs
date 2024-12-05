@@ -1,62 +1,60 @@
-using UnityEngine;
+๏ปฟ๏ปฟusing UnityEngine;
+using System.Collections;
 
-public class PlayerController : MonoBehaviour
-{
-    public float moveSpeed = 4f;  // ความเร็วในการเดิน
-    public float jumpForce = 8f; // ความแรงในการกระโดด
+public class PlayerController : Player {
 
-    [SerializeField]private Rigidbody2D rb;
-    [SerializeField]private bool isGrounded; // ตรวจสอบว่าอยู่บนพื้นหรือไม่
+    bool facingRight = true;
 
+    Rigidbody2D r2d;
+    //Animator anim;
+
+    public bool grounded = false;
+    public Transform groundCheck;
+    float groundRadius = 0.2f;
+    public LayerMask whatIsGround;
+
+    // Use this for initialization
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); // หาคอมโพเนนต์ Rigidbody2D
+        r2d = GetComponent<Rigidbody2D>();
+        //anim = GetComponent<Animator>();
+        originalSpeed = Speed;
     }
 
     void Update()
     {
-        // ควบคุมการเดิน
-        float moveInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
-
-        // ควบคุมการกระโดด
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (grounded && Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            r2d.AddForce(new Vector2(0, JumpForce));
         }
-
-        // หมุนตัวละคร (Flip)
-        if (moveInput != 0)
-        {
-            Flip(moveInput);
-        }
+        UpdateSpeedBoostTimer();
     }
 
-    private void OnCollisionEnter2D(Collision2D target)
+    void FixedUpdate()
     {
-        // เช็คว่าอยู่บนพื้นเมื่อมีการชนกับวัตถุที่มีแท็ก "Ground"
-        if (target.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;  // ตัวละครอยู่บนพื้น
-        }
+
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        //anim.SetBool("Ground", grounded);
+
+        //anim.SetFloat("vSpeed", r2d.velocity.y);
+
+        float move = Input.GetAxis("Horizontal");
+
+        //anim.SetFloat("Speed", Mathf.Abs(move));
+
+        r2d.velocity = new Vector2(move * Speed, r2d.velocity.y);
+
+        if (move > 0 && !facingRight)
+            Flip();
+        else if (move < 0 && facingRight)
+            Flip();
     }
 
-    private void OnCollisionExit2D(Collision2D target)
+    void Flip()
     {
-        // ถ้าออกจากการสัมผัสพื้น ให้ไม่สามารถกระโดดได้
-        if (target.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;  // ตัวละครไม่อยู่บนพื้นแล้ว
-        }
-    }
-
-    private void Flip(float moveInput)
-    {
-        // การใช้ localScale เพื่อสะท้อนตัวละครในแกน X
-        if (moveInput > 0 && transform.localScale.x < 0 || moveInput < 0 && transform.localScale.x > 0)
-        {
-            // สลับค่าของ localScale.x เพื่อ Flip ตัวละคร
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        }
+        facingRight = !facingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
 }

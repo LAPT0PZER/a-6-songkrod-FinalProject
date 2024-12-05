@@ -4,31 +4,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    int health = 10;
-    public int Health => health;
+    int point = 10;
+    public int Point {  get => point; set { point = value; } }
 
-    float jumpForce = 10.0f;
-    public float JumpForce => jumpForce;
+    float jumpForce = 100.0f;
+    public float JumpForce {  get => jumpForce; set { jumpForce = value; } }
 
     float speed = 5.0f;
-    public float Speed => speed;
+    public float Speed { get =>  speed; set { speed = value; } }
 
-    float originalSpeed;
+    protected float originalSpeed;
     float speedBoostDuration = 0.0f;
     float speedBoostTimer = 0.0f;
     bool isSpeedBoostActive = false;
 
-    void Start()
-    {
-        originalSpeed = speed;
-    }
-
-    void Update()
-    {
-        
-    }
-
-    void UpdateSpeedBoostTimer()
+    protected void UpdateSpeedBoostTimer()
     {
         if (isSpeedBoostActive)
         {
@@ -36,29 +26,29 @@ public class Player : MonoBehaviour
             Debug.Log("+++Speed Boost...");
             if (speedBoostTimer >= speedBoostDuration)
             {
-                speed = originalSpeed;
+                Speed = originalSpeed;
                 isSpeedBoostActive = false;
                 Debug.Log("Speed boost ended. Speed reset.");
-
             }
         }
     }
 
-    public void FruitPoint(int healthIncrease)
+    public void FruitPoint(int getPoint)
     {
-        health += healthIncrease;
-        Debug.Log($"Health increased by {healthIncrease}. New health: {health}");
+        Point += getPoint;
+        Debug.Log($"Get Point {getPoint} Points. Total Point: {Point}");
     }
 
     public void FruitPoint(float jumpMultipier)
     {
-        jumpForce += jumpMultipier;
-        Debug.Log($"Strength  increased by {jumpMultipier * 100}%. New Strength: {jumpForce}");
+        JumpForce *= jumpMultipier;
+        Debug.Log($"JumpMultiplier boosted by {jumpMultipier * 100}%. New JumpForce: {JumpForce}");
     }
 
     public void FruitPoint(float speedMultiplier, float duration)
     {
-        speed *= speedMultiplier;
+
+        Speed *= speedMultiplier;
         isSpeedBoostActive = true;
         speedBoostDuration = duration;
         speedBoostTimer = 0.0f;
